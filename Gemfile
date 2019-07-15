@@ -42,7 +42,7 @@ gem 'finishing_moves'
 gem 'awesome_print'
 gem 'hash_dot' # https://github.com/adsteel/hash_dot
 gem 'settingslogic'
-gem 'dotenv-rails'
+# gem 'dotenv-rails'
 gem 'foreman'
 gem 'redis-browser'
 gem 'redis-objects'
