@@ -23,7 +23,7 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
+gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -32,6 +32,28 @@ gem 'jbuilder', '~> 2.5'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
+
+########
+
+gem 'active_interaction'
+gem 'pluck_all'
+gem 'to_bool'
+gem 'finishing_moves'
+gem 'awesome_print'
+gem 'hash_dot' # https://github.com/adsteel/hash_dot
+gem 'settingslogic'
+gem 'dotenv-rails'
+gem 'foreman'
+gem 'redis-browser'
+gem 'redis-objects'
+gem 'jquery-rails'
+gem "bulma-rails", "~> 0.7.5"
+gem 'wisper'
+
+########
+
+
+
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
