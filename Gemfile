@@ -40,15 +40,20 @@ gem 'pluck_all'
 gem 'to_bool'
 gem 'finishing_moves'
 gem 'awesome_print'
-gem 'hash_dot' # https://github.com/adsteel/hash_dot
+gem 'hash_dot' 
 gem 'settingslogic'
-# gem 'dotenv-rails'
 gem 'foreman'
 gem 'redis-browser'
 gem 'redis-objects'
 gem 'jquery-rails'
 gem "bulma-rails", "~> 0.7.5"
 gem 'wisper'
+gem 'redis-namespace'
+gem 'rb-readline'
+
+group :test do
+  gem 'mock_redis'
+end
 
 ########
 
