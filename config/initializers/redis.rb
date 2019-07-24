@@ -2,7 +2,7 @@
 # @Author: msmiller
 # @Date:   2019-07-15 19:09:28
 # @Last Modified by:   msmiller
-# @Last Modified time: 2019-07-15 22:20:42
+# @Last Modified time: 2019-07-23 17:26:46
 #
 # Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 
@@ -20,7 +20,7 @@ p ENV['WORKER']
 
 unless ENV['WORKER'].nil?
 
-  MagicBus.subscribe(["magicbus", ENV['WORKER']], 'MagicBus::dump_message')
+  MagicBus.subscribe_async(["magicbus", ENV['WORKER']], 'Blivot.a_callback') # 'MagicBus::dump_message')
   p "-=> SUBSCRIBED TO #{ENV['WORKER']}"
   # MagicBus.psubscribe("magicbus", 'MagicBus::dump_message')
   # p "-=> SUBSCRIBED TO magicbus"
@@ -28,14 +28,15 @@ unless ENV['WORKER'].nil?
 $tredis = Redis.new
 p $tredis.inspect
 Thread.new do
-$tredis.psubscribe("#{ENV['WORKER']}_*_") do |on|
-  # on.message do |channel, msg|
-  on.pmessage do |pattern, channel, msg|
-    data = JSON.parse(msg)
-    p "-=> ##{channel}: (#{data.length})"
-    p data.inspect   
+  p "PSUBSCRIVE: #{ENV['WORKER']}_*_"
+  $tredis.psubscribe("#{ENV['WORKER']}_*_") do |on|
+    # on.message do |channel, msg|
+    on.pmessage do |pattern, channel, msg|
+      data = JSON.parse(msg)
+      p "-=> ##{channel}: (#{data.length})"
+      p data.inspect   
+    end
   end
-end
 end
 
   # $redis.subscribe(ENV['WORKER']) do |on|
