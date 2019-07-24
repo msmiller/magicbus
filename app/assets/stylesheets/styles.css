@@ -1,0 +1,22 @@
+/*
+* @Author: msmiller
+* @Date:   2019-07-24 12:17:53
+* @Last Modified by:   msmiller
+* @Last Modified time: 2019-07-24 12:24:35
+*
+* Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
+*/
+
+.gridcols {
+  //padding: 0px 15px;
+  min-height: 250px;
+}
+
+.gridcol {
+  margin: 5px;
+  border: 1px solid #ccc;
+}
+
+.buttonz {
+  padding-bottom: 0px !important;
+}

@@ -46,12 +46,13 @@ gem 'foreman'
 ### gem 'procodile'
 gem 'redis-browser'
 gem 'redis-objects'
+gem 'redis-namespace'
+### gem 'redis-semaphore'
 gem 'jquery-rails'
 gem "bulma-rails", "~> 0.7.5"
 gem 'wisper'
-gem 'redis-namespace'
 gem 'rb-readline'
-gem 'wisper'
+### gem 'wisper'
 
 group :test do
   gem 'mock_redis'

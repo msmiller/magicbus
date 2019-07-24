@@ -2,7 +2,7 @@
 # @Author: msmiller
 # @Date:   2019-07-15 19:06:37
 # @Last Modified by:   msmiller
-# @Last Modified time: 2019-07-23 19:13:35
+# @Last Modified time: 2019-07-24 11:52:53
 #
 # Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 
@@ -12,20 +12,31 @@ module MagicBus
   # Fire-and-forget publish
   def self.publish(channels, data)
     channels.gsub(/\s+/, "").split(',').each do |c|
-      $redis.publish c, data.to_json
+      $pubredis.publish c, data.to_json
     end
   end
 
   # Publish a message and wait on a reply
-  def self.publish_rpc(channels, data)
-    channels.gsub(/\s+/, "").split(',').each do |c|
-      $redis.publish c, data.to_json
+  def self.publish_rpc(channel, data)
+    rpc_token = SecureRandom.urlsafe_base64(nil, false)
+    $pubredis.publish channel, data.merge( {rpc_token: rpc_token} ).to_json
+
+    rpc_redis = Redis.new
+    rpc_redis.subscribe(rpc_token) do |on|
+      on.message do |channel, msg|
+        data = JSON.parse(msg)
+        rpc_redis.unsubscribe(rpc_token)
+        rpc_redis.close
+        return(data)
+      end
     end
+    rpc_redis.close
+    return nil
   end
 
   # Synchronous subscribe
   def self.subscribe(channels, callback=nil)
-    $redis.subscribe(channels) do |on|
+    $subredis.subscribe(channels) do |on|
       on.message do |channel, msg|
         data = JSON.parse(msg)
         if callback.nil?
@@ -40,7 +51,7 @@ module MagicBus
   # Asynchronous subscribe
   def self.subscribe_async(channels, callback=nil)
     Thread.new do
-      $redis.subscribe(channels) do |on|
+      $subredis.subscribe(channels) do |on|
         on.message do |channel, msg|
           data = JSON.parse(msg)
           if callback.nil?
@@ -55,7 +66,7 @@ module MagicBus
 
   # Synchronous psubscribe
   def self.psubscribe(pattern, callback=nil)
-    $redis.psubscribe(pattern) do |on|
+    $subredis.psubscribe(pattern) do |on|
       on.pmessage do |pattern, channel, msg|
         data = JSON.parse(msg)
         if callback.nil?
