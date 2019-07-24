@@ -43,6 +43,7 @@ gem 'awesome_print'
 gem 'hash_dot' 
 gem 'settingslogic'
 gem 'foreman'
+### gem 'procodile'
 gem 'redis-browser'
 gem 'redis-objects'
 gem 'jquery-rails'
@@ -50,6 +51,7 @@ gem "bulma-rails", "~> 0.7.5"
 gem 'wisper'
 gem 'redis-namespace'
 gem 'rb-readline'
+gem 'wisper'
 
 group :test do
   gem 'mock_redis'

@@ -2,19 +2,42 @@
 # @Author: msmiller
 # @Date:   2019-07-15 19:06:37
 # @Last Modified by:   msmiller
-# @Last Modified time: 2019-07-23 17:14:45
+# @Last Modified time: 2019-07-23 19:13:35
 #
 # Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 
 module MagicBus
   include Redis::Objects
 
+  # Fire-and-forget publish
   def self.publish(channels, data)
     channels.gsub(/\s+/, "").split(',').each do |c|
       $redis.publish c, data.to_json
     end
   end
 
+  # Publish a message and wait on a reply
+  def self.publish_rpc(channels, data)
+    channels.gsub(/\s+/, "").split(',').each do |c|
+      $redis.publish c, data.to_json
+    end
+  end
+
+  # Synchronous subscribe
+  def self.subscribe(channels, callback=nil)
+    $redis.subscribe(channels) do |on|
+      on.message do |channel, msg|
+        data = JSON.parse(msg)
+        if callback.nil?
+          dump_message(channel, msg)
+        else
+          eval("#{callback}(channel, msg)")
+        end
+      end
+    end
+  end
+
+  # Asynchronous subscribe
   def self.subscribe_async(channels, callback=nil)
     Thread.new do
       $redis.subscribe(channels) do |on|
@@ -30,9 +53,10 @@ module MagicBus
     end
   end
 
-  def self.subscribe(channels, callback=nil)
-    $redis.subscribe(channels) do |on|
-      on.message do |channel, msg|
+  # Synchronous psubscribe
+  def self.psubscribe(pattern, callback=nil)
+    $redis.psubscribe(pattern) do |on|
+      on.pmessage do |pattern, channel, msg|
         data = JSON.parse(msg)
         if callback.nil?
           dump_message(channel, msg)
@@ -42,6 +66,25 @@ module MagicBus
       end
     end
   end
+
+  # Asynchronous psubscribe
+  def self.psubscribe_async(pattern, callback=nil)
+    Thread.new do
+      tredis = Redis.new
+      tredis.psubscribe(pattern) do |on|
+        on.pmessage do |pattern, channel, msg|
+          data = JSON.parse(msg)
+          if callback.nil?
+            dump_message(channel, msg)
+          else
+            eval("#{callback}(channel, msg)")
+          end
+        end
+      end
+    end
+  end
+
+  # Just dump to console if there's no callback
   def self.dump_message(channel, msg)
     data = JSON.parse(msg)
     p "-=> ##{channel}: (#{data.length})"

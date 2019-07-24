@@ -2,16 +2,17 @@
 # @Author: msmiller
 # @Date:   2019-07-23 17:23:16
 # @Last Modified by:   msmiller
-# @Last Modified time: 2019-07-23 17:25:13
+# @Last Modified time: 2019-07-23 17:54:51
 #
 # Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 
+# This is just a basic class to ring out callbacks for pub/sub
 class Blivot
 
-  def self.a_callback(channel, message)
+  def self.dump(channel, message)
     data = JSON.parse(message)
-    p "Blivot.a_callback -=> ##{channel}: (#{data.length})"
-    p "Blivot.a_callback -=> #{data.inspect}"
+    puts "-=> Received: ##{channel}(#{data.length})"
+    ap data
   end
 
 end
