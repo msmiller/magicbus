@@ -52,6 +52,7 @@ gem 'jquery-rails'
 gem "bulma-rails", "~> 0.7.5"
 gem 'wisper'
 gem 'rb-readline'
+gem 'rack-cors'
 ### gem 'wisper'
 
 group :test do
