@@ -42,6 +42,35 @@ This was actually pretty easy. The sender calls the `publish_rpc` method. This i
 
 Let's take the case of an email-sending microservice. The Emailer has templates that are global, Agent-owned, and Office-owned. So it needs to know when Agents and Offices are added, changed, or removed in near-real-time so that if a user tries to manage their email templates, it's not waiting on the next ETL update to find the user. So to get updates to core models, it would:
 
- ```
- subscribe([#agents, #offices]. "my_callback")
- ```
+```
+subscribe([#agents, #offices]. "my_callback")
+```
+
+But it also wants to get email sending requessts, as well as any global requests relating to email, so it needs to listen to it's own channels. This changes the above line to:
+
+```
+subscribe([@email, #email, #agents, #offices]. "my_callback")
+```
+
+And we want all microservices to listen to a global channel for system-level commands. So, let's change the EMailer's subscriptions once more:
+
+```
+subscribe([@email, #email, #agents, #offices, #magicbus]. "my_callback")
+```
+
+To send an email, another microservice would call:
+
+```
+publish('@email', { agent_name: 'John Smith', recipient: 'Fred Jones', ...})
+```
+
+This is a "fire-and-forget" publishing - the sender assumes the recipient will handle it and doesn't need a response. But what if you want to get back a MessageReceipt ID so you could also interogate if the email was send and delivered? Then you'd use the RPC mode as follows:
+
+```
+response = publish_rpc('@email', { agent_name: 'John Smith', recipient: 'Fred Jones', ...})
+message_receipt_id = response.data['message_receipt_id']
+```
+
+It needs to be done this way because email gets sent in the background, so the actual results may not be available in a reasonable amount of time for the RPC call.
+
+Now let's say that the user wants to see if the email was delivered
