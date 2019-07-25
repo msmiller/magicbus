@@ -46,7 +46,7 @@ Let's take the case of an email-sending microservice. The Emailer has templates 
 subscribe([#agents, #offices]. "my_callback")
 ```
 
-But it also wants to get email sending requessts, as well as any global requests relating to email, so it needs to listen to it's own channels. This changes the above line to:
+But it also wants to get email sending requests, so it needs to listen to it's own channels. Plus a channel related to email in general. This changes the above line to:
 
 ```
 subscribe([@email, #email, #agents, #offices]. "my_callback")
@@ -67,10 +67,37 @@ publish('@email', { agent_name: 'John Smith', recipient: 'Fred Jones', ...})
 This is a "fire-and-forget" publishing - the sender assumes the recipient will handle it and doesn't need a response. But what if you want to get back a MessageReceipt ID so you could also interogate if the email was send and delivered? Then you'd use the RPC mode as follows:
 
 ```
-response = publish_rpc('@email', { agent_name: 'John Smith', recipient: 'Fred Jones', ...})
+response = publish_rpc('@email', { command: 'send', template_code: 'renter_confirm', agent_name: 'John Smith', recipient: 'Fred Jones', ...})
 message_receipt_id = response.data['message_receipt_id']
 ```
 
 It needs to be done this way because email gets sent in the background, so the actual results may not be available in a reasonable amount of time for the RPC call.
 
-Now let's say that the user wants to see if the email was delivered
+Now let's say that the sending service wants to see if the email was delivered, you make another RPC style call here:
+
+```
+response = publish_rpc('@email', { command: 'get_receipt', receipt_id: 12345678)
+message_receipt = response.data['message_receipt']
+```
+
+Or ... the Emailer could be written to broadcast it's MessageReceipts after sending was complete to anyone interested. In this case, the Emailer would pubish the MessageReceipts on the channel of the sender (it'd store the source in the MessageReceipt).
+
+```
+# Sender
+subscribe([@my_channel, #magicbus, ...]. "my_callback")
+
+# Emailer ... performed after an email was sent via the SMTP gateway:
+publish('@my_channel', { message_receipt: { id: 12345678, delivered_on: '2019-07-04', ... } })
+```
+
+In this scenario, the sending service is always listening for updates from the Emailer with MessageReceipts. If the sending service wants MessageReceipts to always be available, this is a better strategy. But if it only needs them on-demand, then the RPC method works fine.
+
+This bus approach provides great flexibility and also frees up the microservices from needing to know a large number of endpoints, or fopr needing complex internal routing for everything to be able to talk to each other. All that's needed is agreement on channels and payloads.
+
+## Advantages of Redis Pub/Sub
+
+- Synchronous and asynchronous operation (via use of Ruby Threads).
+- Fan-out is built in - it automatically sends the message to all subscribers.
+- Non-persisted - messages are routed to channels and removed when consumed. So publishing something that isn't consumed doesn't eat up any resources. This is nice for writing features that other services may not be using yet.
+- Easy to code and maintain - the current `magic_bus.rb` I'm working on for this protytype is under 120 lines.
+
