@@ -34,3 +34,14 @@ The MagicBus uses a Twitter-esque namespace pattern:
 
 `rpcXXXXXXXXXXXXXXXX` - these are ad-hoc channels used for waiting for and sending RPC-like responses to requests. The channel name is created by MagicBus and destroyed once the round-trip is complete.
 
+## How RPC Mode Works
+
+This was actually pretty easy. The sender calls the `publish_rpc` method. This is a blocking (synchronous mode) method. It sends the message along with an RPC channel token. Once it sends, it does a `subscribe` on the RPC channel token and waits for a response. The target microservice gets the request and sends the return back by doing a `publish` on the RPC channel. Once the original sender gets it's response, it unsubscribes from the RPC channel and closes the Redis connection it was using to listen on. Easy!
+
+## Example Use Case
+
+Let's take the case of an email-sending microservice. The Emailer has templates that are global, Agent-owned, and Office-owned. So it needs to know when Agents and Offices are added, changed, or removed in near-real-time so that if a user tries to manage their email templates, it's not waiting on the next ETL update to find the user. So to get updates to core models, it would:
+
+ ```
+ subscribe([#agents, #offices]. "my_callback")
+ ```
