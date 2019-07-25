@@ -2,7 +2,7 @@
 # @Author: msmiller
 # @Date:   2019-07-15 19:06:37
 # @Last Modified by:   msmiller
-# @Last Modified time: 2019-07-24 11:52:53
+# @Last Modified time: 2019-07-24 21:59:08
 #
 # Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 
@@ -21,8 +21,9 @@ module MagicBus
     rpc_token = SecureRandom.urlsafe_base64(nil, false)
     $pubredis.publish channel, data.merge( {rpc_token: rpc_token} ).to_json
 
+    # See: https://github.com/redis/redis-rb#timeouts
     rpc_redis = Redis.new
-    rpc_redis.subscribe(rpc_token) do |on|
+    rpc_redis.subscribe_with_timeout(5, rpc_token) do |on|
       on.message do |channel, msg|
         data = JSON.parse(msg)
         rpc_redis.unsubscribe(rpc_token)
@@ -30,6 +31,8 @@ module MagicBus
         return(data)
       end
     end
+
+    rpc_redis.unsubscribe(rpc_token)
     rpc_redis.close
     return nil
   end

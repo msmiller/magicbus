@@ -9,5 +9,17 @@ class HomeController < ApplicationController
   end
 
   def broadcast
+
+    if params['message'] == 'clearlogs'
+      $buslog.clear
+    end
+
+    if params['mode'] == 'publish'
+      MagicBus.publish(params['channel'], { 'message' => params['message'] } )
+    elsif params['mode'] == 'publish_rpc'
+      result = MagicBus.publish_rpc(params['channel'], { 'message' => params['message'] } )
+      buslogger("result : #{result.to_s}")
+    end
+    redirect_to "/"
   end
 end

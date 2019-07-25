@@ -2,7 +2,7 @@
 * @Author: msmiller
 * @Date:   2019-07-24 12:17:53
 * @Last Modified by:   msmiller
-* @Last Modified time: 2019-07-24 13:20:03
+* @Last Modified time: 2019-07-24 14:38:07
 *
 * Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 */
@@ -30,4 +30,5 @@
   font-size: 12px;
   overflow-y: scroll;
   height: 225px !important;
+  font-family: monospace;
 }
