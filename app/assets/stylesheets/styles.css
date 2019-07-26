@@ -2,7 +2,7 @@
 * @Author: msmiller
 * @Date:   2019-07-24 12:17:53
 * @Last Modified by:   msmiller
-* @Last Modified time: 2019-07-24 14:38:07
+* @Last Modified time: 2019-07-25 17:44:14
 *
 * Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 */
@@ -31,4 +31,8 @@
   overflow-y: scroll;
   height: 225px !important;
   font-family: monospace;
+  border: 1px solid #ccc;
 }
+.buslog div { padding: 2px 5px; }
+.buslog div:nth-child(even) {background: #eee}
+.buslog div:nth-child(odd) {background: #FFF}

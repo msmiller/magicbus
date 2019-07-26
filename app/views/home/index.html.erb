@@ -10,6 +10,7 @@
 
   <div class='button is-small' data-action="click->commands#send_to_all">Send to all on #magicbus</div>
   <div class='button is-small' data-action="click->commands#rpc_demo">Make RPC request to @lyrics</div>
+  <div class='button is-small' data-action="click->commands#three_lines">Get first 3 lines of song via RPC</div>
   <div class='button is-small' data-action="click->commands#clear_logs">Clear logs via MagicBus</div>
 </section>
 
@@ -20,14 +21,14 @@
       <h4 class="title is-5 is-uppercase">web</h4>
       <div id="web_log" class="buslog" data-controller="logs" 
                                        data-logs-url="http://localhost:3000/buslog"
-                                       data-logs-refresh-interval="1000">
+                                       data-logs-refresh-interval="2000">
                                        </div>
     </div>
     <div class="column gridcol has-background-light">
       <h4 class="title is-5 is-uppercase">band</h4>
       <div id="band_log" class="buslog" data-controller="logs" 
                                        data-logs-url="http://localhost:3001/buslog"
-                                       data-logs-refresh-interval="1000">
+                                       data-logs-refresh-interval="2000">
                                        </div>
     </div>
   </div>
@@ -37,14 +38,14 @@
       <h4 class="title is-5 is-uppercase">lyrics</h4>
       <div id="lyrics_log" class="buslog" data-controller="logs" 
                                        data-logs-url="http://localhost:3002/buslog"
-                                       data-logs-refresh-interval="1000">
+                                       data-logs-refresh-interval="2000">
                                        </div>
     </div>
     <div class="column gridcol has-background-light">
       <h4 class="title is-5 is-uppercase">albums</h4>
       <div id="albums_log" class="buslog" data-controller="logs" 
                                        data-logs-url="http://localhost:3003/buslog"
-                                       data-logs-refresh-interval="1000">
+                                       data-logs-refresh-interval="2000">
                                        </div>
     </div>
   </div>

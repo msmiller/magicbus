@@ -2,13 +2,65 @@
 # @Author: msmiller
 # @Date:   2019-07-23 17:23:16
 # @Last Modified by:   msmiller
-# @Last Modified time: 2019-07-24 14:16:57
+# @Last Modified time: 2019-07-25 18:09:08
 #
 # Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 
 # This is just a basic class to ring out callbacks for pub/sub
 
 require 'magic_bus'
+
+LYRICS = [
+  "Every day I get in the queue (too much, Magic Bus)",
+  "To get on the bus that takes me to you (too much, Magic Bus)",
+  "I'm so nervous, I just sit and smile (too much, Magic Bus)",
+  "You house is only another mile (too much, Magic Bus)",
+  "Thank you, driver, for getting me here (too much, Magic Bus)",
+  "You'll be an inspector, have no fear (too much, Magic Bus)",
+  "I don't want to cause no fuss (too much, Magic Bus)",
+  "But can I buy your Magic Bus? (too much, Magic Bus)",
+  "I don't care how much I pay (too much, Magic Bus)",
+  "I want to drive my bus to my baby each day (too much, Magic Bus)",
+  "I want it, I want it, I want it, I want it (you can't have it)",
+  "Thruppence and sixpence every day",
+  "Just to drive to my baby",
+  "Thruppence and sixpence each day",
+  "'Cause I drive my baby every way",
+  "Magic bus, Magic Bus, Magic Bus",
+  "Magic bus, Magic Bus, Magic Bus",
+  "Magic bus, Magic Bus, Magic Bus",
+  "Magic bus, Magic Bus, Magic Bus",
+  "I said, now I've got my Magic Bus (too much, Magic Bus)",
+  "I said, now I've got my Magic Bus (too much, Magic Bus)",
+  "I drive my baby every way (too much, Magic Bus)",
+  "Each time I go a different way (too much, Magic Bus)",
+  "I want it, I want it, I want it, I want it",
+  "I want it, I want it, I want it, I want it",
+  "Every day you'll see the dust (too much, Magic Bus)",
+  "As I drive my baby in my Magic Bus (too much, Magic Bus)"
+]
+
+BANDMEMBERS = [
+  "Roger Daltrey",
+  "Pete Townshend",
+  "John Entwistle",
+  "Keith Moon"
+]
+
+ALBUMS = [
+  "My Generation (1965)",
+  "A Quick One (1966)",
+  "The Who Sell Out (1967)",
+  "Tommy (1969)",
+  "Live At Leeds (1970)",
+  "Meaty Beaty Big & Bouncy (1971)",
+  "Who's Next (1971)",
+  "Quadrophenia (1973)",
+  "Odds & Sods (1974)",
+  "The Who By Numbers (1975)",
+  "Who Are You (1978)",
+  "The Kids Are Alright (1979)"
+]
 
 class Blivot
 
@@ -20,7 +72,12 @@ class Blivot
     #######
     if data['rpc_token']
       puts "-=> Publish RPC response to: #{data['rpc_token']})"
-      MagicBus.publish( data['rpc_token'], { 'message' => 'rpc works!' } )
+      if data['message'] == 'get_three_lines'
+        # MagicBus.publish( data['rpc_token'], { 'lyrics' => LYRICS[0..2].join(' / ') } )
+        MagicBus.publish( data['rpc_token'], { 'message' => LYRICS[0..2].join(' / ') } )
+      else
+        MagicBus.publish( data['rpc_token'], { 'message' => 'rpc works!' } )
+      end
     end
     if data['message'] == 'clearlogs'
       $buslog.clear

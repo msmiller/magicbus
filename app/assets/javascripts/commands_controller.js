@@ -2,7 +2,7 @@
 * @Author: msmiller
 * @Date:   2019-07-25 16:28:34
 * @Last Modified by:   msmiller
-* @Last Modified time: 2019-07-25 17:01:21
+* @Last Modified time: 2019-07-25 18:06:02
 *
 * Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 */
@@ -34,6 +34,13 @@
   rpc_demo() {
     $.post( '/broadcast', { 'channel' : '@lyrics',
                             'message' : 'Sent rpc to @lyrics',
+                            'mode' : 'publish_rpc'
+    });
+  }
+
+  three_lines() {
+    $.post( '/broadcast', { 'channel' : '@lyrics',
+                            'message' : 'get_three_lines',
                             'mode' : 'publish_rpc'
     });
   }
