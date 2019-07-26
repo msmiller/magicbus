@@ -101,3 +101,16 @@ This bus approach provides great flexibility and also frees up the microservices
 - Non-persisted - messages are routed to channels and removed when consumed. So publishing something that isn't consumed doesn't eat up any resources. This is nice for writing features that other services may not be using yet.
 - Easy to code and maintain - the current `magic_bus.rb` I'm working on for this protytype is under 120 lines.
 
+## But Wait ... There's More
+
+What about when there's data a microservice needs only for a little while? It's wasteful to persist copies of objects that aren't needed for very long in PG/mySQL, so what if we could write-through a Redis cache? That would cut down on replicated data, and also cut down on message bus calls for objects that aren't persisted in the microservices.
+
+`retrieve(item_class, item_id, endpoint, expire_at)`
+
+This looks for the item (i.e. `Agent#1234`) out on the Redis cache and if it's not there, calls the `endpoint` in RPC mode to `depost` the data. Then return the object as a dot-notation'ed Hash.
+
+`deposit(item, expire_at, rpc_token)`
+
+The receiver would use this to push the requested item out to Redis and send back an acknowledgement to the requester that their data is ready.
+
+

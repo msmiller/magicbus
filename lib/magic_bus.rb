@@ -2,7 +2,7 @@
 # @Author: msmiller
 # @Date:   2019-07-15 19:06:37
 # @Last Modified by:   msmiller
-# @Last Modified time: 2019-07-25 21:59:07
+# @Last Modified time: 2019-07-25 22:04:03
 #
 # Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 
@@ -100,16 +100,18 @@ module MagicBus
 
 
   # Store an object out in Redis for temporary persistence
-  def self.deposit(item, expire_at)
+  def self.deposit(item, expire_at, rpc_token)
     redis_key = "magicache.#{item.class}.#{item.id}"
     # Store object.attributes as a json-hash, or use Marshall
+    # Publish back an acknowledge that it's ready so the requester can get the data
   end
 
   # Pull an object that's being persisted, if it's not there, do an RPC publish to get it
-  def retrieve(item_class, item_id, endpoint, expire_at)
+  def self.retrieve(item_class, item_id, endpoint, expire_at)
     redis_key = "magicache.#{item_class}.#{item_id}"
     # if key exists, de-serialize and return as a dot-notation'ed hash, otherwise:
     # pubish_rpc command: deposit
+    # Get the result from Redis
     # return result 
   end
 
