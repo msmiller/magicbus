@@ -1,6 +1,6 @@
 # MAGICBUS
 
-***"Every day I get in the queue (too much, Magic Bus),
+***"Every day I get in the queue (too much, Magic Bus),<br>
 To get on the bus that takes me to you (too much, Magic Bus)"***
 
 This is a prototype of a Redis-based message bus. The idea is to have something quick, light, and easy to maintain that still provides all the functionality of a REST API for low-volume microservice-to-microservice messaging.
