@@ -113,4 +113,20 @@ This looks for the item (i.e. `Agent#1234`) out on the Redis cache and if it's n
 
 The receiver would use this to push the requested item out to Redis and send back an acknowledgement to the requester that their data is ready.
 
+When you run the demo, the "Get 2nd Album via cache-thru" button will pull a faux "Album" object from one of the services on a 30-second life-span. So you'll notice that that "ALBUMS" log will only show activity every 30 seconds when you hit the button, otherwise it's pulling the data from the Redis cache.
+
+## Installation
+
+1. git clone
+2. install Redis if you haven't already 
+3. bundle
+4. foreman start
+5. point browser to `http://localhost:3000`
+
+If you want to watch the Redis server's contents, you can launch redis-browser at: `http://localhost:3000/redis-browse`
+
+![Alt text](screenshot.png?raw=true "Screenshot")
+
+
+
 
