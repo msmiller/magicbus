@@ -16,3 +16,15 @@ class FooNotifier
     p message
   end
 end
+
+####
+
+require 'magic_bus'
+
+reload!
+reload_lib!
+
+thing = { id: 1234, class: 'Frodus', name: 'Ack Oop', priority: 42 }.to_dot
+
+MagicBus.deposit(thing, Time.now + 5.minutes, '@albums')
+

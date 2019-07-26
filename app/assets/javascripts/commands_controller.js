@@ -2,7 +2,7 @@
 * @Author: msmiller
 * @Date:   2019-07-25 16:28:34
 * @Last Modified by:   msmiller
-* @Last Modified time: 2019-07-25 18:06:02
+* @Last Modified time: 2019-07-26 12:43:28
 *
 * Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 */
@@ -42,6 +42,13 @@
     $.post( '/broadcast', { 'channel' : '@lyrics',
                             'message' : 'get_three_lines',
                             'mode' : 'publish_rpc'
+    });
+  }
+
+  cache_thru() {
+    $.post( '/broadcast', { 'channel' : '@albums',
+                            'message' : 'get_album_2',
+                            'mode' : 'retrieve'
     });
   }
 

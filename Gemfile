@@ -54,6 +54,7 @@ gem 'wisper'
 gem 'rb-readline'
 gem 'rack-cors'
 ### gem 'wisper'
+gem 'hash_dot' # https://github.com/adsteel/hash_dot
 
 group :test do
   gem 'mock_redis'

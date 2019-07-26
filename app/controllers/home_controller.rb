@@ -20,6 +20,9 @@ class HomeController < ApplicationController
     elsif params['mode'] == 'publish_rpc'
       result = MagicBus.publish_rpc(params['channel'], { 'message' => params['message'] } )
       buslogger("result : #{result.to_s}")
+    elsif params['mode'] == 'retrieve'
+      result = MagicBus.retrieve('Album', 2, params['channel'], (Time.now + 30.seconds).to_i)
+      buslogger("Album.2 : #{result.to_s}")
     end
     # redirect_to "/"
     render plain: 'ok'

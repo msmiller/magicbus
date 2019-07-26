@@ -105,7 +105,7 @@ This bus approach provides great flexibility and also frees up the microservices
 
 What about when there's data a microservice needs only for a little while? It's wasteful to persist copies of objects that aren't needed for very long in PG/mySQL, so what if we could write-through a Redis cache? That would cut down on replicated data, and also cut down on message bus calls for objects that aren't persisted in the microservices.
 
-`retrieve(item_class, item_id, endpoint, expire_at)`
+`retrieve(item_class, item_id, channel, expire_at)`
 
 This looks for the item (i.e. `Agent#1234`) out on the Redis cache and if it's not there, calls the `endpoint` in RPC mode to `depost` the data. Then return the object as a dot-notation'ed Hash.
 

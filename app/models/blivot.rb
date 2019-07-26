@@ -71,14 +71,18 @@ class Blivot
     buslogger("#{channel} : #{data.to_s}")
     #######
     if data['rpc_token']
-      puts "-=> Publish RPC response to: #{data['rpc_token']})"
       if data['message'] == 'get_three_lines'
-        # MagicBus.publish( data['rpc_token'], { 'lyrics' => LYRICS[0..2].join(' / ') } )
         MagicBus.publish( data['rpc_token'], { 'message' => LYRICS[0..2].join(' / ') } )
+      elsif data['message'] == 'deposit'
+        # create a faux 'Album.2' object
+        thing = { id: 2, class: 'Album', name: ALBUMS[1] }.to_dot
+        ap data
+        MagicBus.deposit(thing, data['expire_at'], data['rpc_token'])
       else
         MagicBus.publish( data['rpc_token'], { 'message' => 'rpc works!' } )
       end
     end
+
     if data['message'] == 'clearlogs'
       $buslog.clear
     end
