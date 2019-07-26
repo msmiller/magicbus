@@ -1,5 +1,8 @@
 # MAGICBUS
 
+***"Every day I get in the queue (too much, Magic Bus),
+To get on the bus that takes me to you (too much, Magic Bus)"***
+
 This is a prototype of a Redis-based message bus. The idea is to have something quick, light, and easy to maintain that still provides all the functionality of a REST API for low-volume microservice-to-microservice messaging.
 
 ## Core Methods
@@ -123,7 +126,7 @@ When you run the demo, the "Get 2nd Album via cache-thru" button will pull a fau
 4. foreman start
 5. point browser to `http://localhost:3000`
 
-If you want to watch the Redis server's contents, you can launch redis-browser at: `http://localhost:3000/redis-browse`
+If you want to watch the Redis server's contents, you can launch redis-browser at: `http://localhost:3000/redis-browser`
 
 ![Alt text](screenshot.png?raw=true "Screenshot")
 
