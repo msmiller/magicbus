@@ -1,4 +1,5 @@
 class HomeController < ApplicationController
+
   def index
   end
 
@@ -20,6 +21,7 @@ class HomeController < ApplicationController
       result = MagicBus.publish_rpc(params['channel'], { 'message' => params['message'] } )
       buslogger("result : #{result.to_s}")
     end
-    redirect_to "/"
+    # redirect_to "/"
+    render plain: 'ok'
   end
 end

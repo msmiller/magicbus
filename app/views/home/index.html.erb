@@ -1,10 +1,16 @@
-<section class="section buttonz">
+<section class="section buttonz" data-controller="commands">
+  <% if false %>
   <%= link_to "Send to all on #magicbus", broadcast_path(channel: '#magicbus', message: 'Sent to everyone on #magicbus', mode: 'publish'),
       method: :post, class: 'button is-small ' %>
   <%= link_to "Make RPC request to @lyrics", broadcast_path(channel: '@lyrics', message: 'Sent rpc to @lyrics', mode: 'publish_rpc'),
       method: :post, class: 'button is-small ' %>
   <%= link_to "Clear logs via MagicBus", broadcast_path(channel: '#magicbus', message: 'clearlogs', mode: 'publish'),
       method: :post, class: 'button is-small ' %>
+  <% end %>
+
+  <div class='button is-small' data-action="click->commands#send_to_all">Send to all on #magicbus</div>
+  <div class='button is-small' data-action="click->commands#rpc_demo">Make RPC request to @lyrics</div>
+  <div class='button is-small' data-action="click->commands#clear_logs">Clear logs via MagicBus</div>
 </section>
 
 <section class="section">
@@ -12,22 +18,34 @@
   <div class="columns gridcols">
     <div class="column gridcol has-background-white-bis" style="border-color: black; border-style: dashed;">
       <h4 class="title is-5 is-uppercase">web</h4>
-      <div id="web_log" class="buslog"></div>
+      <div id="web_log" class="buslog" data-controller="logs" 
+                                       data-logs-url="http://localhost:3000/buslog"
+                                       data-logs-refresh-interval="1000">
+                                       </div>
     </div>
     <div class="column gridcol has-background-light">
       <h4 class="title is-5 is-uppercase">band</h4>
-      <div id="band_log" class="buslog"></div>
+      <div id="band_log" class="buslog" data-controller="logs" 
+                                       data-logs-url="http://localhost:3001/buslog"
+                                       data-logs-refresh-interval="1000">
+                                       </div>
     </div>
   </div>
 
   <div class="columns gridcols">
     <div class="column gridcol has-background-light">
       <h4 class="title is-5 is-uppercase">lyrics</h4>
-      <div id="lyrics_log" class="buslog"></div>
+      <div id="lyrics_log" class="buslog" data-controller="logs" 
+                                       data-logs-url="http://localhost:3002/buslog"
+                                       data-logs-refresh-interval="1000">
+                                       </div>
     </div>
     <div class="column gridcol has-background-light">
       <h4 class="title is-5 is-uppercase">albums</h4>
-      <div id="albums_log" class="buslog"></div>
+      <div id="albums_log" class="buslog" data-controller="logs" 
+                                       data-logs-url="http://localhost:3003/buslog"
+                                       data-logs-refresh-interval="1000">
+                                       </div>
     </div>
   </div>
 
@@ -35,10 +53,10 @@
 
 <script>
 console.log("Loading logs ...");
-$("#web_log").load('http://localhost:3000/buslog');
-$("#band_log").load('http://localhost:3001/buslog');
-$("#lyrics_log").load('http://localhost:3002/buslog');
-$("#albums_log").load('http://localhost:3003/buslog');
+//$("#web_log").load('http://localhost:3000/buslog');
+//$("#band_log").load('http://localhost:3001/buslog');
+//$("#lyrics_log").load('http://localhost:3002/buslog');
+//$("#albums_log").load('http://localhost:3003/buslog');
 console.log("... done.");
 </script>
 
