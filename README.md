@@ -5,6 +5,8 @@ To get on the bus that takes me to you (too much, Magic Bus)"***
 
 This is a prototype of a Redis-based message bus. The idea is to have something quick, light, and easy to maintain that still provides all the functionality of a REST API for low-volume microservice-to-microservice messaging.
 
+The main file creates the bus in about 150 lines of code. You can look at it here: https://github.com/msmiller/magicbus/blob/master/lib/magic_bus.rb
+
 ## Core Methods
 
 `publish(channels, data)`
@@ -46,19 +48,19 @@ This was actually pretty easy. The sender calls the `publish_rpc` method. This i
 Let's take the case of an email-sending microservice. The Emailer has templates that are global, Agent-owned, and Office-owned. So it needs to know when Agents and Offices are added, changed, or removed in near-real-time so that if a user tries to manage their email templates, it's not waiting on the next ETL update to find the user. So to get updates to core models, it would:
 
 ```ruby
-subscribe(['#agents', '#offices']. 'my_callback')
+subscribe(['#agents', '#offices'], 'my_callback')
 ```
 
 But it also wants to get email sending requests, so it needs to listen to it's own channels. Plus a channel related to email in general. This changes the above line to:
 
 ```ruby
-subscribe(['@email', '#email', '#agents', '#offices']. 'my_callback')
+subscribe(['@email', '#email', '#agents', '#offices'], 'my_callback')
 ```
 
 And we want all microservices to listen to a global channel for system-level commands. So, let's change the EMailer's subscriptions once more:
 
 ```ruby
-subscribe(['@email', '#email', '#agents', '#offices', '#magicbus']. 'my_callback')
+subscribe(['@email', '#email', '#agents', '#offices', '#magicbus'], 'my_callback')
 ```
 
 To send an email, another microservice would call:
