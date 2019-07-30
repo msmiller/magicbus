@@ -89,7 +89,7 @@ Or ... the Emailer could be written to broadcast it's MessageReceipts after send
 
 ```ruby
 # Sender
-subscribe(['@my_channel', '#magicbus', ...]. 'my_callback')
+subscribe(['@my_channel', '#magicbus', ...], 'my_callback')
 
 # Emailer ... performed after an email was sent via the SMTP gateway:
 publish('@my_channel', { message_receipt: { id: 12345678, delivered_on: '2019-07-04', ... } })
@@ -119,6 +119,8 @@ This looks for the item (i.e. `Agent#1234`) out on the Redis cache and if it's n
 The receiver would use this to push the requested item out to Redis and send back an acknowledgement to the requester that their data is ready.
 
 When you run the demo, the "Get 2nd Album via cache-thru" button will pull a faux "Album" object from one of the services on a 30-second life-span. So you'll notice that that "ALBUMS" log will only show activity every 30 seconds when you hit the button, otherwise it's pulling the data from the Redis cache.
+
+This feature uses Redis as a temporary document cache, but consider that this could also be hooked up to something like MongoDB if the amount of cached data started to pile up. So there's the flexibility here to grow and maintain a shared semi-volitile data store that all microservices could share.
 
 ## Installation
 
