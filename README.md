@@ -128,6 +128,8 @@ When you run the demo, the "Get 2nd Album via cache-thru" button will pull a fau
 4. foreman start
 5. point browser to `http://localhost:3000`
 
+The demo brings up 4 servers. One running as the "web" UI to act as a front-end to drive the demo, and three as back-end microservices. It refreshes the logs every second (using StimulusJS) so you can hit the various buttons and see the responses and traffic in near-real-time.
+
 If you want to watch the Redis server's contents, you can launch redis-browser at: `http://localhost:3000/redis-browser`
 
 ![Alt text](screenshot.png?raw=true "Screenshot")
