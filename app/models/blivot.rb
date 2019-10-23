@@ -2,7 +2,7 @@
 # @Author: msmiller
 # @Date:   2019-07-23 17:23:16
 # @Last Modified by:   msmiller
-# @Last Modified time: 2019-07-25 18:09:08
+# @Last Modified time: 2019-10-23 11:20:17
 #
 # Copyright (c) 2017-2018 Sharp Stone Codewerks / Mark S. Miller
 
@@ -68,6 +68,34 @@ class Blivot
     data = JSON.parse(message)
     puts "-=> Received: #{channel}(#{data.length})"
     ap data
+    buslogger("#{channel} : #{data.to_s}")
+    #######
+    if data['rpc_token']
+      if data['message'] == 'get_three_lines'
+        MagicBus.publish( data['rpc_token'], { 'message' => LYRICS[0..2].join(' / ') } )
+      elsif data['message'] == 'deposit'
+        # create a faux 'Album.2' object
+        thing = { id: 2, class: 'Album', name: ALBUMS[1] }.to_dot
+        ap data
+        MagicBus.deposit(thing, data['expire_at'], data['rpc_token'])
+      else
+        MagicBus.publish( data['rpc_token'], { 'message' => 'rpc works!' } )
+      end
+    end
+
+    if data['message'] == 'clearlogs'
+      $buslog.clear
+    end
+
+  end
+
+  def self.rbdump(*args)
+    channel, message = args
+    data = message # JSON.parse(message) 
+
+ap data
+p "-=> Received: #{channel}(#{data.length})"
+ap data
     buslogger("#{channel} : #{data.to_s}")
     #######
     if data['rpc_token']

@@ -62,7 +62,7 @@ end
 
 ########
 
-
+gem 'redbus', path: "../redbus"
 
 
 # Reduces boot times through caching; required in config/boot.rb
